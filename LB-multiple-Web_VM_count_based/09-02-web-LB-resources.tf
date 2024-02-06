@@ -37,6 +37,7 @@ resource "azurerm_lb_probe" "web_lb_probe" {
 # Resource-5: Create LB Rule
 resource "azurerm_lb_rule" "web_lb_rule_app1" {
   name                           = "web-app1-rule"
+  backend_address_pool_ids = [ azurerm_lb_backend_address_pool.web_lb_backend_address_pool.id ]
   protocol                       = "Tcp"
   frontend_port                  = 80
   backend_port                   = 80
