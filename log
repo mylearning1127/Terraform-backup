@@ -1,0 +1,270 @@
+[root@awx ~]#
+[root@awx ~]# cd /Terraform_final/
+[root@awx Terraform_final]# ls -lrt
+total 12
+-rw-r--r-- 1 root root  92 Feb 23 13:56 02-RG.tf
+-rw-r--r-- 1 root root 500 Feb 23 14:26 01-providers.tf
+-rw-r--r-- 1 root root 960 Feb 23 14:27 terraform.tfstate
+[root@awx Terraform_final]#
+[root@awx Terraform_final]# ls -lrt
+total 12
+-rw-r--r-- 1 root root  92 Feb 23 13:56 02-RG.tf
+-rw-r--r-- 1 root root 500 Feb 23 14:26 01-providers.tf
+-rw-r--r-- 1 root root 960 Feb 23 14:27 terraform.tfstate
+[root@awx Terraform_final]# vim 02-RG.tf
+[root@awx Terraform_final]# terraform apply
+azurerm_resource_group.myRG-1: Refreshing state... [id=/subscriptions/96b1dc94-e890-4315-b7ae-1ca22f5b3256/resourceGroups/myrg-1]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # azurerm_resource_group.myRG-2 will be created
+  + resource "azurerm_resource_group" "myRG-2" {
+      + id       = (known after apply)
+      + location = "eastus2"
+      + name     = "myrg-1"
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+azurerm_resource_group.myRG-2: Creating...
+╷
+│ Error: A resource with the ID "/subscriptions/96b1dc94-e890-4315-b7ae-1ca22f5b3256/resourceGroups/myrg-1" already exists - to be managed via Terraform this resource needs to be imported into the State. Please see the resource documentation for "azurerm_resource_group" for more information.
+│
+│   with azurerm_resource_group.myRG-2,
+│   on 02-RG.tf line 7, in resource "azurerm_resource_group" "myRG-2":
+│    7: resource "azurerm_resource_group" "myRG-2" {
+│
+╵
+[root@awx Terraform_final]# vim 02-RG.tf
+[root@awx Terraform_final]# terraform apply
+azurerm_resource_group.myRG-1: Refreshing state... [id=/subscriptions/96b1dc94-e890-4315-b7ae-1ca22f5b3256/resourceGroups/myrg-1]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # azurerm_resource_group.myRG-2 will be created
+  + resource "azurerm_resource_group" "myRG-2" {
+      + id       = (known after apply)
+      + location = "eastus2"
+      + name     = "myrg-2"
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+azurerm_resource_group.myRG-2: Creating...
+azurerm_resource_group.myRG-2: Creation complete after 5s [id=/subscriptions/96b1dc94-e890-4315-b7ae-1ca22f5b3256/resourceGroups/myrg-2]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+[root@awx Terraform_final]#
+[root@awx Terraform_final]# ls -lrt
+total 16
+-rw-r--r-- 1 root root  500 Feb 23 14:26 01-providers.tf
+-rw-r--r-- 1 root root  186 Feb 24 02:14 02-RG.tf
+-rw-r--r-- 1 root root  958 Feb 24 02:14 terraform.tfstate.backup
+-rw-r--r-- 1 root root 1737 Feb 24 02:14 terraform.tfstate
+[root@awx Terraform_final]# vim 01-providers.tf
+[root@awx Terraform_final]# vim 01-providers.tf
+[root@awx Terraform_final]# terraform apply
+╷
+│ Error: Unsupported block type
+│
+│   on 01-providers.tf line 24:
+│   24: backend "azurerm" {
+│
+│ Blocks of type "backend" are not expected here.
+╵
+[root@awx Terraform_final]# vim 01-providers.tf
+[root@awx Terraform_final]# terraform fmt
+01-providers.tf
+[root@awx Terraform_final]# vim 01-providers.tf
+[root@awx Terraform_final]# terraform apply
+╷
+│ Error: Unsupported block type
+│
+│   on 01-providers.tf line 23, in provider "azurerm":
+│   23:   backend "azurerm" {
+│
+│ Blocks of type "backend" are not expected here.
+╵
+[root@awx Terraform_final]# vim 01-providers.tf
+[root@awx Terraform_final]# terraform apply
+╷
+│ Error: Backend initialization required, please run "terraform init"
+│
+│ Reason: Initial configuration of the requested backend "azurerm"
+│
+│ The "backend" is the interface that Terraform uses to store state,
+│ perform operations, etc. If this message is showing up, it means that the
+│ Terraform configuration you're using is using a custom configuration for
+│ the Terraform backend.
+│
+│ Changes to backend configurations require reinitialization. This allows
+│ Terraform to set up the new configuration, copy existing state, etc. Please run
+│ "terraform init" with either the "-reconfigure" or "-migrate-state" flags to
+│ use the current configuration.
+│
+│ If the change reason above is incorrect, please verify your configuration
+│ hasn't changed and try again. At this point, no changes to your existing
+│ configuration or state have been made.
+╵
+[root@awx Terraform_final]# terraform init
+
+Initializing the backend...
+╷
+│ Error: Error building ARM Config: please ensure you have installed Azure CLI version 2.0.79 or newer. Error parsing json result from the Azure CLI: launching Azure CLI: exec: "az": executable file not found in $PATH.
+│
+│
+╵
+
+[root@awx Terraform_final]# vim 01-providers.tf
+[root@awx Terraform_final]# echo -e "[azure-cli]
+> name=Azure CLI
+> baseurl=https://packages.microsoft.com/yumrepos/azure-cli
+> enabled=1
+> gpgcheck=1
+> gpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/azure-cli.repo
+[azure-cli]
+name=Azure CLI
+baseurl=https://packages.microsoft.com/yumrepos/azure-cli
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+[root@awx Terraform_final]# yum install install azure-cli -y
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: centos.mirror.net.in
+ * extras: centos.mirror.net.in
+ * updates: centos.mirror.net.in
+azure-cli                                                                                                           | 1.5 kB  00:00:00
+base                                                                                                                | 3.6 kB  00:00:00
+extras                                                                                                              | 2.9 kB  00:00:00
+hashicorp                                                                                                           | 1.4 kB  00:00:00
+updates                                                                                                             | 2.9 kB  00:00:00
+(1/2): hashicorp/7/x86_64/primary                                                                                   | 220 kB  00:00:00
+(2/2): updates/7/x86_64/primary_db                                                                                  |  25 MB  00:00:30
+hashicorp                                                                                                                        1618/1618
+No package install available.
+Resolving Dependencies
+--> Running transaction check
+---> Package azure-cli.x86_64 0:2.38.1-1.el7 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+===========================================================================================================================================
+ Package                          Arch                          Version                             Repository                        Size
+===========================================================================================================================================
+Installing:
+ azure-cli                        x86_64                        2.38.1-1.el7                        azure-cli                         50 M
+
+Transaction Summary
+===========================================================================================================================================
+Install  1 Package
+
+Total download size: 50 M
+Installed size: 709 M
+Downloading packages:
+azure-cli-2.38.1-1.el7.x86_64.rpm                                                                                   |  50 MB  00:00:11
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : azure-cli-2.38.1-1.el7.x86_64                                                                                           1/1
+  Verifying  : azure-cli-2.38.1-1.el7.x86_64                                                                                           1/1
+
+Installed:
+  azure-cli.x86_64 0:2.38.1-1.el7
+
+Complete!
+[root@awx Terraform_final]# terraform init
+
+Initializing the backend...
+╷
+│ Error: Error inspecting states in the "local" backend:
+│     Error retrieving keys for Storage Account "terraformcontainer123": storage.AccountsClient#ListKeys: Failure responding to request: StatusCode=404 -- Original Error: autorest/azure: Service returned an error. Status=404 Code="ResourceGroupNotFound" Message="Resource group 'project1' could not be found."
+│
+│ Prior to changing backends, Terraform inspects the source and destination
+│ states to determine what kind of migration steps need to be taken, if any.
+│ Terraform failed to load the states. The data in both the source and the
+│ destination remain unmodified. Please resolve the above error and try again.
+│
+│
+╵
+
+[root@awx Terraform_final]# vim 01-providers.tf
+[root@awx Terraform_final]# terraform init
+
+Initializing the backend...
+Acquiring state lock. This may take a few moments...
+Do you want to copy existing state to the new backend?
+  Pre-existing state was found while migrating the previous "local" backend to the
+  newly configured "azurerm" backend. No existing state was found in the newly
+  configured "azurerm" backend. Do you want to copy this state to the new "azurerm"
+  backend? Enter "yes" to copy and "no" to start with an empty state.
+
+  Enter a value: yes
+
+Releasing state lock. This may take a few moments...
+
+Successfully configured the backend "azurerm"! Terraform will automatically
+use this backend unless the backend configuration changes.
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/azurerm from the dependency lock file
+- Using previously-installed hashicorp/azurerm v3.93.0
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+[root@awx Terraform_final]# terraform init
+
+Initializing the backend...
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/azurerm from the dependency lock file
+- Using previously-installed hashicorp/azurerm v3.93.0
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+[root@awx Terraform_final]# terraform apply -auto-approve
+Acquiring state lock. This may take a few moments...
+azurerm_resource_group.myRG-1: Refreshing state... [id=/subscriptions/96b1dc94-e890-4315-b7ae-1ca22f5b3256/resourceGroups/myrg-1]
+azurerm_resource_group.myRG-2: Refreshing state... [id=/subscriptions/96b1dc94-e890-4315-b7ae-1ca22f5b3256/resourceGroups/myrg-2]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration and found no differences, so no changes are needed.
+Releasing state lock. This may take a few moments...
+
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+[root@awx Terraform_final]#
